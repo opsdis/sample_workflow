@@ -1,0 +1,24 @@
+language: python
+python:
+- '3.6'
+- '3.8'
+cache: pip
+install:
+- pip install -r requirements.txt
+script:
+- python -m unittest discover -v
+- coverage run  -m unittest discover
+- coverage report  src/hello/*
+- python setup.py sdist
+before_deploy:
+- export RELEASE_PKG_FILE=$(ls dist/icinga2-exporter-*.tar.gz)
+- echo "deploying $RELEASE_PKG_FILE to GitHub releases"
+deploy:
+  provider: releases
+  file_glob: true
+  file: "${RELEASE_PKG_FILE}"
+  skip_cleanup: true
+  on:
+    tags: true
+  api-key:
+    secure: bmeXRjC4IN9mwqrA11xCzWA/DcD3uZTQ8mJ9yEtJeGBF8aCllHQz4IdobgWWSH7mPtUH9amXIZATR2rgAqTZQoZ8WLhX+Cp66izDZtGFzybFP6lt5O37UZ0nkpj7hy/kvcOji0JjFkk66x2PNWuLEL6pqZMhnu5Hp7/fyvs9NJmq2/YHloD6IfseLb/ZcUE6PPanUK7heExmzkAl6QiWuRk4UyQa0aNe6pRO8Vwha0n07i1o3GwOjOpfxcsKmndvdoXhXxBc4dQJr5ljnm6Eczf7CuwEsNZt6a8L51PAFLpdYPOqJiTARxKylF64yXTwrsbfpuT0GX4z8xH6NbfTyxjZw3P9PQxKT45LWvXrqfPsTpwpRNbUN02es4bRket2c/gw970j4/PxOmtoU9hteWM3slaRtNiB0u0UyN7K1JAE3rXYm2jaYyeE3ones9+QYvigsR5lEhBBsRgRgP40AwgNH2vHjG30WS9LCtuaqmovF0/9m3aOY8Wbce1EEIqE2YHLqNQFVkSB8zph8xoaY5e8O4k6+TzHHehvglB9TOy7QmAg1laBC3mla8YLgPBMMnCAjvAoKqe/GrBm3EJXIhszVv3X45mjBNxLseErqDK2D8mVI9DiKFYCOlSB+dIsTZot3XC44EOAqFR/FsfCtDwBn7tivCfjbRH1R8EWpHo=
