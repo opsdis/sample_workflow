@@ -11,7 +11,7 @@ script:
 - coverage report  src/hello/*
 - python setup.py sdist
 before_deploy:
-- export RELEASE_PKG_FILE=$(ls dist/icinga2-exporter-*.tar.gz)
+- export RELEASE_PKG_FILE=$(ls dist/hello-*.tar.gz)
 - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   provider: releases
